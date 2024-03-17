@@ -1,0 +1,30 @@
+[
+  {
+    "username": "rishabhp",
+    "codeLanguage": "Java",
+    "stdin": "47b678wtsbjk",
+    "sourceCode": "const { username, codeLanguage, stdin, sourceCode } = req.body;\nconst { username, codeLanguage, stdi",
+    "timestamp": "2024-03-17T18:55:52.975Z"
+  },
+  {
+    "username": "rishabhpandey230@gmail.com",
+    "codeLanguage": "C++",
+    "stdin": "3334f",
+    "sourceCode": "const { username, codeLanguage, stdin, sourceCode } = req.body;\n",
+    "timestamp": "2024-03-17T18:56:49.414Z"
+  },
+  {
+    "username": "sahu",
+    "codeLanguage": "JavaScript",
+    "stdin": "5grrd",
+    "sourceCode": "const { username, codeLanguage, stdin, sourceCode } = req.body;\nsourceCodesourceCodesourceCodesourceCodesourceCodesourceCodesourceCodesourceCodesourceCodesourceCodesourceCodesourceCodesourceCodesourceCodesourceCodesourceCodesourceCodesourceCodesourceCodesourceCodesourceCode",
+    "timestamp": "2024-03-17T18:58:04.368Z"
+  },
+  {
+    "username": "shoyo",
+    "codeLanguage": "JavaScript",
+    "stdin": "fnName = \"sum\"\nactions = [\"call\",\"call\",\"getCallCount\",\"call\",\"getCallCount\"]\nvalues = [[2,2],[2,2],[],[1,2],[]]",
+    "sourceCode": "function memoize(fn) {\n    let count = 0;\n    const map = {};\n    return function(...args) {\n        const key = JSON.stringify(args);\n        if(key in map)\n        {\n            return map[key]\n        }\n        else\n        {\n            count++;\n            map[key] = fn(...args);\n            return map[key];\n        }\n        \n    }\n}",
+    "timestamp": "2024-03-17T19:11:25.342Z"
+  }
+]
