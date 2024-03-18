@@ -9,7 +9,10 @@ const port = 3001;
 
 let submissions = [];
 
-app.use(cors());
+app.use(cors({
+    allowedHeaders: ['*'],
+    origin: '*'
+}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
