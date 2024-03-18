@@ -69,6 +69,11 @@ app.get('/all-submissions', async (req, res) => {
     }
 });
 
+app.get('/', (req, res) => {
+    res.send({ message: 'Server started' });
+});
+
+
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
