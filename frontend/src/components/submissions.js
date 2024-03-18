@@ -1,7 +1,5 @@
 'use client'
 
-// AllSubmissions.js
-
 import { useState, useEffect } from 'react';
 import styles from './submissions.css';
 
