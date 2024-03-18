@@ -18,7 +18,7 @@ const FormComponent = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch('https://tuf-snippets-backend.vercel.app/submit-form', {
+            const response = await fetch('https://tuf-snippets-backend.onrender.com/submit-form', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

@@ -7,7 +7,7 @@ const AllSubmissions = () => {
     const [submissions, setSubmissions] = useState([]);
 
     useEffect(() => {
-        fetch('https://tuf-snippets-backend.vercel.app/all-submissions')
+        fetch('https://tuf-snippets-backend.onrender.com/all-submissions')
             .then((response) => response.json())
             .then((data) => setSubmissions(data))
             .catch((error) => console.error('Error fetching submissions:', error));
