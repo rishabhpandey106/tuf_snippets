@@ -14,7 +14,7 @@ const FormComponent = () => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
     };
-
+    
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -25,6 +25,7 @@ const FormComponent = () => {
                 },
                 body: JSON.stringify(formData)
             });
+            
             const data = await response.json();
             console.log(data); // Response from the backend
         } catch (error) {
