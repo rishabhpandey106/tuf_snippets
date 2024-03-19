@@ -8,15 +8,22 @@ const tuf = require("./models/database");
 const app = express();
 const port = 3001;
 
-// let submissions = [];
 let flag = 0;
 
+// const redisClient = new Redis({
+//     host: process.env.HOST,
+//     port: process.env.PORT,
+//     username: process.env.USERNAME,
+//     password: process.env.PASSWORD,
+//     maxRetriesPerRequest: 50,
+// });
+
 const redisClient = new Redis({
-    host: process.env.HOST,
-    port: process.env.PORT,
-    username: process.env.USERNAME,
-    password: process.env.PASSWORD,
-});
+    host: 'redis-11150278-rishabh.a.aivencloud.com',
+    port: 21307,
+    username: 'default',
+    password: 'AVNS_ieYi7TdZvY0J4mJ6LN-',
+  });
 
 redisClient.on('error', (err) => {
     console.error('Redis connection error:', err);
