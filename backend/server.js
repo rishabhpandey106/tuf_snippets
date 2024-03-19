@@ -18,6 +18,11 @@ const redisClient = new Redis({
     password: process.env.PASSWORD,
 });
 
+redisClient.on('error', (err) => {
+    console.error('Redis connection error:', err);
+    // Add your error handling logic here
+});
+
 app.use(cors({
     allowedHeaders: ['*'],
     origin: '*'
