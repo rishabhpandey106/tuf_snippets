@@ -13,7 +13,7 @@ let flag = 0;
 
 const redisClient = new Redis({
     host: process.env.HOST,
-    port: 21307,
+    port: 21308,
     username: 'default',
     password: process.env.PASSWORD,
 });
