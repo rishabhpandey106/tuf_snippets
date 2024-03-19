@@ -156,3 +156,11 @@ button {
 button:hover {
   background-color: #0056b3;
 }
+
+a {
+  justify-content: center;
+  display: flex;
+  position: relative;
+  text-decoration: none;
+  margin-top: 10px;
+}
