@@ -12,7 +12,6 @@ const AllSubmissions = () => {
             .then((data) => setSubmissions(data))
             .catch((error) => console.error('Error fetching submissions:', error));
     }, []);
-
     return (
         <div className={styles.container}>
             <h1>All Submissions</h1>

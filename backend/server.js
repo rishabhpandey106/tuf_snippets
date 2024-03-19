@@ -1,13 +1,22 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const Redis = require("ioredis")
 const cors = require('cors');
-// const fs = require('fs');
+require('dotenv/config');
 const tuf = require("./models/database");
 
 const app = express();
 const port = 3001;
 
-let submissions = [];
+// let submissions = [];
+let flag = 0;
+
+const redisClient = new Redis({
+    host: process.env.HOST,
+    port: 21307,
+    username: 'default',
+    password: process.env.PASSWORD,
+});
 
 app.use(cors({
     allowedHeaders: ['*'],
@@ -16,12 +25,10 @@ app.use(cors({
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-//Retrieval
-// fs.readFile('submissions.json', 'utf8', (err, data) => {
-//     if (!err) {
-//         submissions = JSON.parse(data);
-//     }
-// });
+
+const getAsync = redisClient.get.bind(redisClient);
+const setexAsync = redisClient.setex.bind(redisClient);
+
 
 app.post('/submit-form', async (req, res) => {
     const { username, codeLanguage, stdin, sourceCode } = req.body;
@@ -33,36 +40,44 @@ app.post('/submit-form', async (req, res) => {
         await connection.query('INSERT INTO formdata (username, codeLanguage, stdin, sourceCode) VALUES (?, ?, ?, ?)',
             [username, codeLanguage, stdin, sourceCode]);
         connection.release();
-        console.log('Form data saved to MySQL');
+        await setexAsync('submissions', 3600, JSON.stringify(req.body));
+        console.log('Form data saved to MySQL and cached in Redis');
+        flag = 1;
         res.status(200).json({ message: 'Form submitted successfully' });
     } catch (error) {
         console.error('Error saving form data to MySQL:', error);
         res.status(500).json({ error: 'Error saving form data' });
     }
-
-    // const newSubmission = { username, codeLanguage, stdin, sourceCode, timestamp };
-    // submissions.push(newSubmission);
-
-    // // Saving
-    // fs.writeFile('submissions.json', JSON.stringify(submissions, null, 2), (err) => {
-    //     if (err) {
-    //         console.error('Error saving submissions:', err);
-    //         res.status(500).json({ error: 'Error saving submissions' });
-    //     } else {
-    //         console.log('Submission saved successfully');
-    //         res.status(200).json({ message: 'Form submitted successfully' });
-    //     }
-    // });
 });
 
 app.get('/all-submissions', async (req, res) => {
     // res.json(submissions);
     try {
-        const connection = await tuf.getConnection();
-        const [rows] = await connection.query('SELECT * FROM formdata');
-        connection.release();
-        console.log('Fetched all submissions from MySQL');
-        res.json(rows);
+        if(flag == 0) // no new submissions
+        {
+            const cachedData = await getAsync('submissions');
+
+            if (cachedData) {
+                console.log('Sending data from Redis cache');
+                res.json(JSON.parse(cachedData));
+            }
+            else {
+                console.log('No cached data available');
+                res.status(404).json({ error: 'No data available' });
+            }
+        }
+        else{
+            const connection = await tuf.getConnection();
+            console.log("operation on databse");
+            const [rows] = await connection.query('SELECT * FROM formdata');
+            connection.release();
+            await setexAsync('submissions', 3600, JSON.stringify(rows));
+            console.log('Fetched all submissions from MySQL');
+            res.json(rows);
+            console.log("b-flag-",flag);
+            flag = 0;
+            console.log("a-flag-",flag);
+        }
     } catch (error) {
         console.error('Error fetching submissions from MySQL:', error);
         res.status(500).json({ error: 'Error fetching submissions' });
