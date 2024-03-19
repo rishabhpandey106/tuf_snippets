@@ -12,10 +12,10 @@ const port = 3001;
 let flag = 0;
 
 const redisClient = new Redis({
-    host: process.env.HOST,
+    host: 'redis-11150278-rishabh.a.aivencloud.com',
     port: 21308,
     username: 'default',
-    password: process.env.PASSWORD,
+    password: 'AVNS_ieYi7TdZvY0J4mJ6LN-',
 });
 
 redisClient.on('error', (err) => {
