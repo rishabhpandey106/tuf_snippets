@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const Redis = require("ioredis")
 const cors = require('cors');
+const axios = require('axios');
 require('dotenv/config');
 const tuf = require("./models/database");
 
@@ -9,14 +10,6 @@ const app = express();
 const port = 3001;
 
 let flag = 0;
-
-// const redisClient = new Redis({
-//     host: process.env.HOST,
-//     port: process.env.PORT,
-//     username: process.env.USERNAME,
-//     password: process.env.PASSWORD,
-//     maxRetriesPerRequest: 50,
-// });
 
 const redisClient = new Redis({
     host: 'redis-11150278-rishabh.a.aivencloud.com',
@@ -27,7 +20,6 @@ const redisClient = new Redis({
 
 redisClient.on('error', (err) => {
     console.error('Redis connection error:', err);
-    // Add your error handling logic here
 });
 
 app.use(cors({
@@ -65,10 +57,9 @@ app.post('/submit-form', async (req, res) => {
 app.get('/all-submissions', async (req, res) => {
     // res.json(submissions);
     try {
-        if(flag == 0) // no new submissions
+        const cachedData = await getAsync('submissions');
+        if(flag == 0 && cachedData) // on newer submissions
         {
-            const cachedData = await getAsync('submissions');
-
             if (cachedData) {
                 console.log('Sending data from Redis cache');
                 res.json(JSON.parse(cachedData));
@@ -78,7 +69,8 @@ app.get('/all-submissions', async (req, res) => {
                 res.status(404).json({ error: 'No data available' });
             }
         }
-        else{
+        else //if cache empty or newer submissions
+        {
             const connection = await tuf.getConnection();
             console.log("operation on databse");
             const [rows] = await connection.query('SELECT * FROM formdata');
